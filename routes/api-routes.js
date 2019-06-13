@@ -31,12 +31,24 @@ module.exports = function (app) {
         console.log(err);
       });
 
-      console.log('SCRAPE SUBMITTED')
+    console.log('SCRAPE SUBMITTED')
   });
 
   // GET Route for getting all stories from the db
   app.get("/stories", function (req, res) {
-    db.Story.find({})
+    const where = {};
+
+    if (req.query.saved) {
+      if (req.query.saved === 'true') {
+        where.saved = true;
+      } else if (req.query.saved === 'false') {
+        where.saved = false;
+      }
+    }
+
+    console.log('finding stories', where)
+
+    db.Story.find(where)
       .then(function (dbstory) {
         res.json(dbstory);
       })
@@ -45,56 +57,92 @@ module.exports = function (app) {
       });
   });
 
-  // Route for retrieving all Notes from the db
-app.get("/notes", function(req, res) {
-  // Find all Notes
-  db.Note.find({})
-    .then(function(dbNote) {
-      res.json(dbNote);
-    })
-    .catch(function(err) {
-      res.json(err);
-    });
-});
+  // Route for grabbing a specific Story by id, populate it with it's note
+  app.get("/story/:id", function (req, res) {
+    // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
+    db.Story.findOne({
+        _id: req.params.id
+      })
+      // ..and populate all of the notes associated with it
+      .populate("note")
+      .then(function (dbStory) {
+        res.json(dbStory);
+      })
+      .catch(function (err) {
+        res.json(err);
+      });
+  });
 
-// Route for grabbing a specific Story by id, populate it with it's note
-app.get("/story/:id", function(req, res) {
-  // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-  db.Story.findOne({ _id: req.params.id })
-    // ..and populate all of the notes associated with it
-    .populate("note")
-    .then(function(dbStory) {
-      res.json(dbStory);
-    })
-    .catch(function(err) {
-      res.json(err);
-    });
-});
+  // Updating story to saved
+  app.put("/story/:id", function (req, res) {
+    console.log('received save request', req.params.id)
+    db.Story.updateOne({
+        _id: req.params.id
+      }, {
+        saved: true
+      })
+      .then(function (value) {
+        console.log('processed save request', req.params.id, value)
+        res.json(value);
+      });
+  });
 
-app.post("/story/:id", function(req, res) {
-  // Create a new Note in the db
-  db.Note.create(req.body)
-    .then(function(dbNote) {
-      return db.Story.findOneAndUpdate({}, { $push: { notes: dbNote._id } }, { new: true });
-    })
-    .then(function(dbStoryNote) {
-      res.json(dbStoryNote);
-    })
-    .catch(function(err) {
-      res.json(err);
-    });
-});
+  // updating the notes for a single story
+  app.post("/story/:id", function (req, res) {
+    console.log("broken thing", req.body)
+    // Create a new Note in the db
+    db.Note.create(req.body)
+      .then(function (dbNote) {
+        return db.Story.updateOne({
+          _id: req.params.id,
+        }, {
+          note: dbNote._id
+        });
+      })
+      .then(function (dbStoryNote) {
+        res.json(dbStoryNote);
+      })
+      .catch(function (err) {
+        res.json(err);
+      });
+  });
 
-app.delete("/stories", function(req, res) {
-  // delete all 
-  db.Story.deleteMany({})
-    .then(function(dbStory) {
-      res.json(dbStory);
-    })
-    .catch(function(err) {
-      res.json(err);
-    });
-});
+  app.delete("/story/:id", function (req, res) {
+    // delete all 
+    db.Story.deleteOne({
+        _id: req.params.id
+      })
+      .then(function (dbStory) {
+        res.json(dbStory);
+      })
+      .catch(function (err) {
+        res.json(err);
+      });
+  });
+
+  app.delete("/note/:id", function (req, res) {
+    // delete all 
+    db.Note.deleteOne({
+        _id: req.params.id
+      })
+      .then(function (dbStory) {
+        res.json(dbStory);
+      })
+      .catch(function (err) {
+        res.json(err);
+      });
+  });
+
+  app.delete("/stories", function (req, res) {
+    // delete all 
+    db.Story.deleteMany({})
+      .then(function (dbStory) {
+        res.json(dbStory);
+      })
+      .catch(function (err) {
+        res.json(err);
+      });
+  });
 
 }
 
@@ -103,9 +151,9 @@ function scrapeHtml(html, res) {
   const $ = cheerio.load(html);
   console.log('SCRAPE LOADED')
 
-  
+
   $("article").each(function (i, element) {
-    
+
     var result = {};
 
     result.title = $("h4", "span", element)
@@ -116,11 +164,12 @@ function scrapeHtml(html, res) {
       .trim();
     result.link = $("a", element)
       .attr("href");
+    result.saved = false;
 
     console.log('SPAN RESULT:', result);
 
     if (result.title && result.summary && result.link) {
-    
+
       db.Story.create(result)
         .then(function (dbstory) {
           console.log(dbstory);
