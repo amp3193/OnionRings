@@ -34,7 +34,6 @@ module.exports = function (app) {
       .catch(err => {
         console.log(err);
       });
-
     console.log('SCRAPE SUBMITTED')
   });
 
