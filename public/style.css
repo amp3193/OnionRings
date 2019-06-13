@@ -2,6 +2,10 @@ body {
     background-image: url("images/trippy.jpg");
 }
 
+* {
+    font-family: 'Carter One', cursive;
+}
+
 .loader {
     margin: 30px;
     border: 16px solid #f3f3f3;
@@ -9,29 +13,87 @@ body {
     border-top: 16px solid #3498db;
     width: 120px;
     height: 120px;
-    -webkit-animation: spin 2s linear infinite; /* Safari */
+    -webkit-animation: spin 2s linear infinite;
+    /* Safari */
     animation: spin 2s linear infinite;
-  }
-  
-  /* Safari */
-  @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+}
 
-  .story, .storyUn, .header {
+/* Safari */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.story {
     background-color: rgb(190, 176, 192);
-    border-style: groove;
+
     margin: auto;
     padding: 20px;
+}
 
-  }
+.story-btns {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: start;
+}
 
-  img {
-      float: right;
-  }
+.note {
+    border-top: solid gray 1px;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.merged-header {
+    font-family: 'Carter One', cursive;
+    display: flex;
+    flex-direction: column;
+    /* border-style: groove; */
+    background-color: rgb(175, 85, 122);
+    margin: 0px;
+    padding: 0px;
+}
+
+.btn-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+}
+
+.main-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-content: center;
+}
+
+.main-header h1 {
+    font-size: 75px;
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+}
+
+.main-header img {
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+    max-height: 150px;
+}
+

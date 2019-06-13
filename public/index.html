@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Carter+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <title>Weird News Now!</title>
 </head>
+
 <body>
     <div class="container">
-    <div class="row rounded header">
-        <img src="images/monster.png" alt="monster">
-        <h1>Weird News Now!</h1>
-    </div>
-    <div class="row rounded header">
-        <div class="text-center">
-            <button class="btn btn-success scrape-btn m-3">Scrape News</button>
-            <button class="btn btn-warning clear-btn m-3">Clear Stories</button>
-            <a class="btn btn-success home m-3" href="/">Home</a>
-            <a class="btn btn-primary saved m-3" href="/saved">Saved Articles</a>
+        <div class="row rounded merged-header">
+            <div class="main-header">
+                <h1>Weird News Now!</h1>
+                <img src="images/monster.png" alt="monster">
+            </div>
+            <div class="btn-header">
+                <button class="btn btn-dark scrape-btn m-2">Scrape News</button>
+                <button class="btn btn-warning clear-btn m-2">Clear Stories</button>
+                <a class="btn btn-light home m-2" href="/">Home</a>
+                <a class="btn btn-dark saved m-2" href="/saved">Saved Articles</a>
+            </div>
         </div>
+        <div class="root"></div>
     </div>
-    <div class="root"></div>
+
     </div>
-   
-</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>
