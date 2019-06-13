@@ -6,3 +6,5 @@ xfonts-scalable
 xfonts-cyrillic
 libxfont1
 libnotify4
+libxscrnsaver
+libxss1
