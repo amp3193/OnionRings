@@ -15,7 +15,7 @@ app.use(express.static("public"));
 require("./routes/api-routes.js")(app);
 require("./routes/html-routes.js")(app);
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsdb"
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsdb"
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
