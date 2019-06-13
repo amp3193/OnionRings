@@ -22,9 +22,13 @@ module.exports = function (app) {
     nightmare
       .goto(url)
       .wait('body')
-      .evaluate(() => document.querySelector('body').innerHTML)
+      .evaluate(() => {
+        console.log('evaluating HTML for scrape')
+        return document.querySelector('body').innerHTML;
+      })
       .end()
       .then(function (html) {
+        console.log('HTML retrieved for scrape')
         scrapeHtml(html, res);
       })
       .catch(err => {
